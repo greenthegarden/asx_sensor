@@ -118,14 +118,14 @@ class Get_ASX_info(hass.Hass):
             #convert output to JSON
             jtags = json.loads(response.text)
 
-            sym = jtags['data'][0]['code']
-            c_date = jtags['data'][0]['close_date']
-            c_price = jtags['data'][0]['close_price']
-            ch_price = jtags['data'][0]['change_price']
-            #volume = jtags['data'][0]['volume']
-            day_high = jtags['data'][0]['day_high_price']
-            day_low = jtags['data'][0]['day_low_price']
-            ch_perc =  jtags['data'][0]['change_in_percent']
+            sym = jtags['data'][0].get('code')
+            c_date = jtags['data'][0].get('close_date')
+            c_price = jtags['data'][0].get('close_price')
+            ch_price = jtags['data'][0].get('change_price')
+            #volume = jtags['data'][0].get('volume')
+            day_high = jtags['data'][0].get('day_high_price')
+            day_low = jtags['data'][0].get('day_low_price')
+            ch_perc =  jtags['data'][0].get('change_in_percent')
 
             #connect to the website and get the JSON dataset for that symbol
             url = self.URLc + tick + self.c_dividends
@@ -135,8 +135,8 @@ class Get_ASX_info(hass.Hass):
             jtags = json.loads(response.text)
 
             if jtags:
-                div_y = jtags[0]['year']
-                div_a = jtags[0]['amount']
+                div_y = jtags[0].get('year')
+                div_a = jtags[0].get('amount')
             else:
                 div_y = ""
                 div_a = ""
@@ -148,13 +148,13 @@ class Get_ASX_info(hass.Hass):
             #convert output to JSON
             jtags = json.loads(response.text)
 
-            nam = jtags['name_short']
-            year_high = jtags['primary_share']['year_high_price']
-            year_h_date = jtags['primary_share']['year_high_date']
-            year_low = jtags['primary_share']['year_low_price']
-            year_l_date = jtags['primary_share']['year_low_date']
-            year_ch_perc = jtags['primary_share']['year_change_in_percentage']
-            susp = jtags['primary_share']['suspended']
+            nam = jtags.get('name_short')
+            year_high = jtags['primary_share'].get('year_high_price')
+            year_h_date = jtags['primary_share'].get('year_high_date')
+            year_low = jtags['primary_share'].get('year_low_price')
+            year_l_date = jtags['primary_share'].get('year_low_date')
+            year_ch_perc = jtags['primary_share'].get('year_change_in_percentage')
+            susp = jtags['primary_share'].get('suspended')
 
             diff = float(ch_price)
 
@@ -166,8 +166,3 @@ class Get_ASX_info(hass.Hass):
                 icon_mdi = self.tick_mdi
 
             self.set_state(self.asx_sensor + sym, state=str(c_price), replace=True, attributes= {"icon": icon_mdi, "friendly_name": nam, "close_date": str(c_date), "change_price": str(ch_price), "suspended": str(susp), "day_high": str(day_high), "day_low": str(day_low), "day_perc": str(ch_perc), "year_high": str(year_high), "year_high_date": str(year_h_date), "year_low": str(year_low), "year_low_date": str(year_l_date), "year_change_perc": str(year_ch_perc), "year_dividend": str(div_y), "amount_dividend": str(div_a) })
-
-            
-        
-
-#
